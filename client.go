@@ -73,16 +73,16 @@ func (m *MiPush) SendTargetMessageList(ctx context.Context, msgList []*TargetedM
 		return nil, errors.New("empty msg")
 	}
 	if len(msgList) == 1 {
-		return m.Send(ctx, msgList[0].message, msgList[0].target)
+		return m.Send(ctx, msgList[0].Message, msgList[0].Target)
 	}
 	params := m.assembleTargetMessageListParams(msgList)
 	var bytes []byte
 	var err error
-	if msgList[0].targetType == TargetTypeRegID {
+	if msgList[0].TargetType == TargetTypeRegID {
 		bytes, err = m.doPost(ctx, m.host+MultiMessagesRegIDURL, params)
-	} else if msgList[0].targetType == TargetTypeReAlias {
+	} else if msgList[0].TargetType == TargetTypeReAlias {
 		bytes, err = m.doPost(ctx, m.host+MultiMessagesAliasURL, params)
-	} else if msgList[0].targetType == TargetTypeAccount {
+	} else if msgList[0].TargetType == TargetTypeAccount {
 		bytes, err = m.doPost(ctx, m.host+MultiMessagesUserAccountURL, params)
 	} else {
 		panic("bad targetType")
@@ -468,8 +468,8 @@ func (m *MiPush) assembleTargetMessageListParams(msgList []*TargetedMessage) url
 
 	for _, m := range msgList {
 		messages = append(messages, &OneMsg{
-			Target:  m.target,
-			Message: m.message,
+			Target:  m.Target,
+			Message: m.Message,
 		})
 	}
 	bytes, err := json.Marshal(messages)
@@ -477,7 +477,7 @@ func (m *MiPush) assembleTargetMessageListParams(msgList []*TargetedMessage) url
 		panic(err)
 	}
 	form.Add("messages", string(bytes))
-	form.Add("time_to_send", strconv.FormatInt(msgList[0].message.TimeToSend, 10))
+	form.Add("time_to_send", strconv.FormatInt(msgList[0].Message.TimeToSend, 10))
 	return form
 }
 
