@@ -59,7 +59,7 @@ func (m *MiPush) Send(ctx context.Context, msg *Message, regID string) (*SendRes
 // regIds的个数不得超过1000个。
 func (m *MiPush) SendToList(ctx context.Context, msg *Message, regIDList []string) (*SendResult, error) {
 	if len(regIDList) == 0 || len(regIDList) > 1000 {
-		panic("wrong number regIDList")
+		return nil, errors.New("wrong number regIDList")
 	}
 	return m.Send(ctx, msg, strings.Join(regIDList, ","))
 }
