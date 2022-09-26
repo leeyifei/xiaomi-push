@@ -190,33 +190,33 @@ const (
 )
 
 type TargetedMessage struct {
-	message    *Message
-	targetType TargetType
-	target     string
+	Message    *Message
+	TargetType TargetType
+	Target     string
 }
 
 func NewTargetedMessage(m *Message, target string, targetType TargetType) *TargetedMessage {
 	return &TargetedMessage{
-		message:    m,
-		targetType: targetType,
-		target:     target,
+		Message:    m,
+		TargetType: targetType,
+		Target:     target,
 	}
 }
 
 func (tm *TargetedMessage) SetTargetType(targetType TargetType) *TargetedMessage {
-	tm.targetType = targetType
+	tm.TargetType = targetType
 	return tm
 }
 
 func (tm *TargetedMessage) SetTarget(target string) *TargetedMessage {
-	tm.target = target
+	tm.Target = target
 	return tm
 }
 
-func (tm *TargetedMessage) JSON() []byte {
+func (tm *TargetedMessage) JSON() ([]byte, error) {
 	bytes, err := json.Marshal(tm)
 	if err != nil {
-		panic(err)
+		return bytes, err
 	}
-	return bytes
+	return bytes, nil
 }
