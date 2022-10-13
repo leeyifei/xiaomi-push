@@ -44,6 +44,10 @@ const (
 	TopicsAllURL = "/v1/topic/all" // 获取一个应用的某个用户的目前订阅的所有Topic
 )
 
+const (
+	StopByIDUrl = "/v1/message/switch/stop_by_id"
+)
+
 var (
 	PostRetryTimes = 3
 )

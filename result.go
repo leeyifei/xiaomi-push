@@ -2,7 +2,7 @@ package xiaomipush
 
 type Result struct {
 	Result      string `json:"result"`
-	MessageID   string `json:"trace_id"`
+	MessageID   string `json:"trace_id,omitempty"`
 	Code        int64  `json:"code"`
 	Description string `json:"description,omitempty"`
 	Info        string `json:"info,omitempty"`
@@ -87,4 +87,10 @@ type TopicsOfRegIDResult struct {
 	Data struct {
 		List []string `json:"list,omitempty"`
 	} `json:"data,omitempty"`
+}
+
+type StopResult struct {
+	Result
+	Data struct {
+	}
 }

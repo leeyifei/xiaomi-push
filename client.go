@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -450,6 +451,28 @@ func (m *MiPush) GetTopicsOfRegID(ctx context.Context, regID string) (*TopicsOfR
 		return nil, err
 	}
 	return &result, nil
+}
+
+//----------------------------------------消息终止----------------------------------------//
+func (m *MiPush) StopByID(ctx context.Context, msgids []string) (*Result, error) {
+	form := url.Values{}
+	form.Add("restricted_package_name", strings.Join(m.packageName, ","))
+	for _, msgid := range msgids {
+		form.Add("msg_ids", msgid)
+	}
+
+	bytes, err := m.doPost(ctx, m.host+StopByIDUrl, form)
+	log.Println(string(bytes))
+	if err != nil {
+		return nil, err
+	}
+	var result *Result
+	err = json.Unmarshal(bytes, result)
+	return result, err
+}
+
+func (m *MiPush) StopByJobkey(jobkeys []string) {
+
 }
 
 func (m *MiPush) assembleSendParams(msg *Message, regID string) url.Values {

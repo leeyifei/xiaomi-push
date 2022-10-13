@@ -1,15 +1,16 @@
 package xiaomipush
 
 import (
+	"log"
 	"testing"
 	"time"
 
 	"golang.org/x/net/context"
 )
 
-var packageName string = "sbkssbkssbkssbkssbkssbkssbkssbks"
+var packageName string = "mmm"
 
-var client = NewClient("sbkssbkssbkssbkssbkssbkssbkssbks", []string{packageName})
+var client = NewClient("xxx", []string{packageName})
 
 var msg1 *Message = NewAndroidMessage("hi baby1", "hi1").SetPayload("开心么1").SetPassThrough(0)
 var msg2 *Message = NewAndroidMessage("hi baby2", "hi2 ").SetPayload("开心么2").SetPassThrough(1)
@@ -261,4 +262,10 @@ func TestMiPush_GetTopicsOfRegID(t *testing.T) {
 		t.Errorf("TestMiPush_GetTopicsOfRegID failed :%v\n", err)
 	}
 	t.Logf("result=%#v\n", result)
+}
+
+func TestMiPush_StopByID(t *testing.T) {
+	result, err := client.StopByID(context.TODO(), []string{"sdm61641665647047875fF", "sdm60968665647109653FN"})
+	log.Println(result)
+	log.Println(err)
 }
