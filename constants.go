@@ -45,7 +45,9 @@ const (
 )
 
 const (
-	StopByIDUrl = "/v1/message/switch/stop_by_id"
+	StopByIDUrl           = "/v1/message/switch/stop_by_id"
+	StopByJobkeyUrl       = "/v1/message/switch/stop_by_jobkey"
+	RevokeByJobkeyOrIDUrl = "/v2/message/revoke"
 )
 
 var (

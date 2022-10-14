@@ -94,3 +94,7 @@ type StopResult struct {
 	Data struct {
 	}
 }
+
+type RevokeResult struct {
+	Result
+}

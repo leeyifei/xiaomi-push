@@ -454,7 +454,8 @@ func (m *MiPush) GetTopicsOfRegID(ctx context.Context, regID string) (*TopicsOfR
 }
 
 //----------------------------------------消息终止----------------------------------------//
-func (m *MiPush) StopByID(ctx context.Context, msgids []string) (*Result, error) {
+// StopByID 根据消息id停止推送
+func (m *MiPush) StopByID(ctx context.Context, msgids []string) (*StopResult, error) {
 	form := url.Values{}
 	form.Add("restricted_package_name", strings.Join(m.packageName, ","))
 	for _, msgid := range msgids {
@@ -466,13 +467,48 @@ func (m *MiPush) StopByID(ctx context.Context, msgids []string) (*Result, error)
 	if err != nil {
 		return nil, err
 	}
-	var result *Result
-	err = json.Unmarshal(bytes, result)
-	return result, err
+	var result StopResult
+	err = json.Unmarshal(bytes, &result)
+	return &result, err
 }
 
-func (m *MiPush) StopByJobkey(jobkeys []string) {
+// StopByJobkey 根据jobkey停止推送
+func (m *MiPush) StopByJobkey(ctx context.Context, jobkeys []string) (*StopResult, error) {
+	form := url.Values{}
+	form.Add("restricted_package_name", strings.Join(m.packageName, ","))
+	for _, jobkey := range jobkeys {
+		form.Add("job_keys", jobkey)
+	}
 
+	bytes, err := m.doPost(ctx, m.host+StopByJobkeyUrl, form)
+	if err != nil {
+		return nil, err
+	}
+	var result StopResult
+	err = json.Unmarshal(bytes, &result)
+	return &result, err
+}
+
+//----------------------------------------消息撤销----------------------------------------//
+func (m *MiPush) RevokeByJobkeyOrID(ctx context.Context, jobkey, msgid string) (*RevokeResult, error) {
+	form := url.Values{}
+	form.Add("restricted_package_name", strings.Join(m.packageName, ","))
+	if len(jobkey) > 0 {
+		form.Add("job_key", jobkey)
+	} else if len(msgid) > 0 {
+		form.Add("msg_id", msgid)
+	} else {
+		return nil, errors.New("missing job_key or msg_id")
+	}
+	bytes, err := m.doPost(ctx, m.host+RevokeByJobkeyOrIDUrl, form)
+	if err != nil {
+		return nil, err
+	}
+	log.Println(string(bytes))
+
+	var result RevokeResult
+	err = json.Unmarshal(bytes, &result)
+	return &result, err
 }
 
 func (m *MiPush) assembleSendParams(msg *Message, regID string) url.Values {

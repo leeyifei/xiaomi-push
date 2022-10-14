@@ -2,15 +2,16 @@ package xiaomipush
 
 import (
 	"log"
+	"os"
 	"testing"
 	"time"
 
 	"golang.org/x/net/context"
 )
 
-var packageName string = "mmm"
+var packageName string = os.Getenv("XIAOMI_PUSH_PACKAGE_NAME")
 
-var client = NewClient("xxx", []string{packageName})
+var client = NewClient(os.Getenv("XIAOMI_PUSH_SECRET"), []string{packageName})
 
 var msg1 *Message = NewAndroidMessage("hi baby1", "hi1").SetPayload("开心么1").SetPassThrough(0)
 var msg2 *Message = NewAndroidMessage("hi baby2", "hi2 ").SetPayload("开心么2").SetPassThrough(1)
@@ -266,6 +267,18 @@ func TestMiPush_GetTopicsOfRegID(t *testing.T) {
 
 func TestMiPush_StopByID(t *testing.T) {
 	result, err := client.StopByID(context.TODO(), []string{"sdm61641665647047875fF", "sdm60968665647109653FN"})
+	log.Println(result)
+	log.Println(err)
+}
+
+func TestMiPush_StopByJobkey(t *testing.T) {
+	result, err := client.StopByJobkey(context.TODO(), []string{"sdm61641665647047875fF", "sdm60968665647109653FN"})
+	log.Println(result)
+	log.Println(err)
+}
+
+func TestMiPush_RevokeByJobkeyOrID(t *testing.T) {
+	result, err := client.RevokeByJobkeyOrID(context.TODO(), "", "sdm61641665647047875fF")
 	log.Println(result)
 	log.Println(err)
 }
