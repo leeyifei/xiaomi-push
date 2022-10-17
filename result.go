@@ -42,10 +42,13 @@ type SingleStatusResult struct {
 			ClickRate       string `json:"click_rate"`
 			MsgType         string `json:"msg_type"`
 			DeliveryRate    string `json:"delivery_rate"`
-			Delivered       int32  `json:"delivered"`
+			Delivered       uint   `json:"delivered"`
 			ID              string `json:"id"`
-			Click           int32  `json:"click"`
-			Resolved        int32  `json:"resolved"`
+			Click           uint   `json:"click"`
+			Resolved        uint   `json:"resolved"`
+			RawCounter      uint   `json:"raw_counter"`
+			InvalidIarget   uint   `json:"invalid_iarget"`
+			MsgDisplay      uint   `json:"msg_display"`
 		} `json:"data,omitempty"`
 	} `json:"data,omitempty"`
 }
